@@ -272,8 +272,8 @@ func TestFlatMap(t *testing.T) {
 
 	ov := New(value)
 
-	m := FlatMap(*ov, func(v int) *Optional[string] {
-		return New(fmt.Sprintf("%d", v))
+	m := FlatMap(*ov, func(v int) Optional[string] {
+		return *New(fmt.Sprintf("%d", v))
 	})
 
 	if !m.IsPresent() {

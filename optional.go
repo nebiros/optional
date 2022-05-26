@@ -161,7 +161,7 @@ func Map[T, U any](o Optional[T], f func(v T) U) *Optional[U] {
 	return New[U](f(ov))
 }
 
-func FlatMap[T, U any](o Optional[T], f func(v T) *Optional[U]) *Optional[U] {
+func FlatMap[T, U any](o Optional[T], f func(v T) Optional[U]) *Optional[U] {
 	if !o.IsPresent() {
 		return Empty[U]()
 	}
@@ -171,5 +171,7 @@ func FlatMap[T, U any](o Optional[T], f func(v T) *Optional[U]) *Optional[U] {
 		return Empty[U]()
 	}
 
-	return f(ov)
+	result := f(ov)
+
+	return &result
 }
