@@ -17,7 +17,7 @@ func Example() {
 	fmt.Println("sv: " + sv)
 }
 
-func Example_nullable() {
+func Example_nillable() {
 	var (
 		v   *string
 		tmp = "something"
@@ -25,7 +25,7 @@ func Example_nullable() {
 
 	v = &tmp
 
-	ov := optional.OfNullable(v)
+	ov := optional.OfNillable(v)
 
 	if !ov.IsPresent() {
 		panic("v not present")

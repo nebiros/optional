@@ -16,7 +16,7 @@ func main() {
     
     v = &tmp
     
-    ov := optional.OfNullable(v)
+    ov := optional.OfNillable(v)
 
     err := doSomething(ov)
     if err != nil {
