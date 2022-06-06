@@ -16,16 +16,16 @@ type Optional[T any] struct {
 	present *struct{}
 }
 
-func New[T any](value T) *Optional[T] {
-	return &Optional[T]{value: value, present: &struct{}{}}
+func New[T any](value T) Optional[T] {
+	return Optional[T]{value: value, present: &struct{}{}}
 }
 
-func Empty[T any]() *Optional[T] {
+func Empty[T any]() Optional[T] {
 	var empty T
-	return &Optional[T]{value: empty, present: nil}
+	return Optional[T]{value: empty, present: nil}
 }
 
-func OfNillable[T any](value *T) *Optional[T] {
+func OfNillable[T any](value *T) Optional[T] {
 	if value == nil {
 		return Empty[T]()
 	}
@@ -57,9 +57,9 @@ func (o *Optional[T]) IsEmpty() bool {
 	return o.present == nil
 }
 
-func (o *Optional[T]) Or(f func(v T) *Optional[T]) *Optional[T] {
+func (o *Optional[T]) Or(f func(v T) Optional[T]) Optional[T] {
 	if o.IsPresent() {
-		return o
+		return *o
 	}
 
 	return f(o.value)
@@ -81,13 +81,13 @@ func (o *Optional[T]) OrElseErr() (T, error) {
 	return o.value, nil
 }
 
-func (o *Optional[T]) Filter(f func(v T) bool) *Optional[T] {
+func (o *Optional[T]) Filter(f func(v T) bool) Optional[T] {
 	if !o.IsPresent() {
 		return Empty[T]()
 	}
 
 	if f(o.value) {
-		return o
+		return *o
 	}
 
 	return Empty[T]()
@@ -148,7 +148,7 @@ func (o *Optional[T]) Value() (driver.Value, error) {
 	return o.value, nil
 }
 
-func Map[T, U any](o Optional[T], f func(v T) U) *Optional[U] {
+func Map[T, U any](o Optional[T], f func(v T) U) Optional[U] {
 	if !o.IsPresent() {
 		return Empty[U]()
 	}
@@ -161,7 +161,7 @@ func Map[T, U any](o Optional[T], f func(v T) U) *Optional[U] {
 	return New[U](f(ov))
 }
 
-func FlatMap[T, U any](o Optional[T], f func(v T) Optional[U]) *Optional[U] {
+func FlatMap[T, U any](o Optional[T], f func(v T) Optional[U]) Optional[U] {
 	if !o.IsPresent() {
 		return Empty[U]()
 	}
@@ -171,7 +171,5 @@ func FlatMap[T, U any](o Optional[T], f func(v T) Optional[U]) *Optional[U] {
 		return Empty[U]()
 	}
 
-	result := f(ov)
-
-	return &result
+	return f(ov)
 }

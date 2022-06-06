@@ -165,7 +165,7 @@ func TestMarshalJSON(t *testing.T) {
 	aValue := &tmp
 
 	type aTestType struct {
-		AField *Optional[string] `json:"aField"`
+		AField Optional[string] `json:"aField"`
 	}
 
 	v := aTestType{
@@ -242,7 +242,7 @@ func TestMap(t *testing.T) {
 
 	ov := New(value)
 
-	m := Map(*ov, func(v int) string {
+	m := Map(ov, func(v int) string {
 		return fmt.Sprintf("%d", v)
 	})
 
@@ -272,8 +272,8 @@ func TestFlatMap(t *testing.T) {
 
 	ov := New(value)
 
-	m := FlatMap(*ov, func(v int) Optional[string] {
-		return *New(fmt.Sprintf("%d", v))
+	m := FlatMap(ov, func(v int) Optional[string] {
+		return New(fmt.Sprintf("%d", v))
 	})
 
 	if !m.IsPresent() {
